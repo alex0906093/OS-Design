@@ -32,13 +32,13 @@ int main(int argc, char *argv[])
 	int i;
 	char c;
 	for(i = 0; i < big; i++){
-	c = BigArray[i];
+		c = BigArray[i];
 	}
-	
+
 	//long long start = clock_time_1();
 	/*
- 	 *Create 2 loops, outside one should control what power of 2 inside one 
- 	 *is incrementing by, fill an array with results in order to find where 
+	 *Create 2 loops, outside one should control what power of 2 inside one 
+	 *is incrementing by, fill an array with results in order to find where 
 	 *cache is no longer being accessed
 	 *	 
 	 */
@@ -48,22 +48,41 @@ int main(int argc, char *argv[])
 	for(power = 2; power < 4096; power = power * 2){	 
 		long long start = clock_time_1();
 		for(i = 0; i < big; i = i + power){
-		c = BigArray[i];
-		char a = c + c;
+			c = BigArray[i];
+			char a = c + c;
 		}
 		long long end = clock_time_1();
 		float totaltime1 = ((float)(end - start));
 		float avgAcc = totaltime1 / (big / power);
 		times[timeinsert] = avgAcc;
-		printf("Average Access Time for loop was %f \n", avgAcc);
-		
+		timeinsert++;
+		//printf("Average Access Time for loop was %f \n", avgAcc);
+
 	}
-	/*long long end = clock_time_1();
-	float totaltime1 = ((float)(end - start)) / 1000000000;
-	printf("Total time 1 = %f\n", totaltime1);
-	float avgAcc = totaltime1 / big;
-	printf("average access time = %f \n", avgAcc);
-	*/
+	float lasttime = times[0];
+	float currtime;
+	float misspen;
+	int j;
+	float diff;
+	int powcount = 1;
+	for(j = 1; j < 11; j++){
+		currtime = times[j];
+		diff = 0.0;
+		diff = currtime - lasttime;
+		
+		if(diff > 1.5){
+			misspen = diff;
+			break;
+		}
+		powcount++;
+		lasttime = currtime;
+	}
+	
+	int linesize = pow(2, powcount);
+	printf("Cache Block/Line Size: %d B\n", linesize);
+	misspen = misspen / CLOCKS_PER_SEC;
+	misspen = misspen * 1000000;
+	printf("Cache Miss Penalty: %f us\n", misspen);
 
 	return 0;
 }
