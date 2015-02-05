@@ -34,17 +34,36 @@ int main(int argc, char *argv[])
 	for(i = 0; i < big; i++){
 	c = BigArray[i];
 	}
-	//start to get block size
-	long long start = clock_time_1(); 
-	for(i = 0; i < big; i++){
-	c = BigArray[i];
-	char a = c + c;
+	
+	//long long start = clock_time_1();
+	/*
+ 	 *Create 2 loops, outside one should control what power of 2 inside one 
+ 	 *is incrementing by, fill an array with results in order to find where 
+	 *cache is no longer being accessed
+	 *	 
+	 */
+	static int power;
+	float times[11];
+	int timeinsert = 0;
+	for(power = 2; power < 4096; power = power * 2){	 
+		long long start = clock_time_1();
+		for(i = 0; i < big; i = i + power){
+		c = BigArray[i];
+		char a = c + c;
+		}
+		long long end = clock_time_1();
+		float totaltime1 = ((float)(end - start));
+		float avgAcc = totaltime1 / (big / power);
+		times[timeinsert] = avgAcc;
+		printf("Average Access Time for loop was %f \n", avgAcc);
+		
 	}
-	long long end = clock_time_1();
-	float totaltime1 = ((float)(end - start)) / CLOCKS_PER_SEC;
+	/*long long end = clock_time_1();
+	float totaltime1 = ((float)(end - start)) / 1000000000;
 	printf("Total time 1 = %f\n", totaltime1);
 	float avgAcc = totaltime1 / big;
 	printf("average access time = %f \n", avgAcc);
+	*/
 
 	return 0;
 }
