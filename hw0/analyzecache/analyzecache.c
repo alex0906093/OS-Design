@@ -14,7 +14,6 @@ long long clock_time_1();
 
 int main(int argc, char *argv[])
 {	
-	//clock_t start_t, end_t, step1_t, step2_t;
 	int big = 12 * MB;
 	char *BigArray = (char*)malloc(big);
 	memset(BigArray, 0, big);
@@ -34,8 +33,6 @@ int main(int argc, char *argv[])
 	for(i = 0; i < big; i++){
 		c = BigArray[i];
 	}
-
-	//long long start = clock_time_1();
 	/*
 	 *Create 2 loops, outside one should control what power of 2 inside one 
 	 *is incrementing by, fill an array with results in order to find where 
