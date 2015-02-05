@@ -10,11 +10,12 @@
 
 #define KB 1024
 #define MB 1024 * KB
+long long clock_time_1();
 
 int main(int argc, char *argv[])
 {	
-	clock_t start_t, end_t, step1_t, step2_t;
-	int big = 8 * MB;
+	//clock_t start_t, end_t, step1_t, step2_t;
+	int big = 12 * MB;
 	char *BigArray = (char*)malloc(big);
 	memset(BigArray, 0, big);
 	int f = 0;
@@ -27,25 +28,29 @@ int main(int argc, char *argv[])
 		}
 		f++;
 	}
-
-	double power = 1;
-	static double checknum = 0;
 	//traversal to get mapped to physical memory
-	for(power = 1; checknum < big; power++){
-		checknum = pow(2, power);
+	int i;
+	char c;
+	for(i = 0; i < big; i++){
+	c = BigArray[i];
 	}
-	
-	checknum = 0;
-	for(power = 1; checknum < big; power++){
-		checknum = pow(2, power);
-		step1_t = clock();
-                char a = BigArray[(int)checknum];
-                char b = BigArray[(int)checknum/2];
-                char c = a + b;
-                step2_t = clock();
-                end_t = (double)(step1_t - step2_t) / CLOCKS_PER_SEC;
-                printf("Time for loop was: %f\n", end_t);
+	//start to get block size
+	long long start = clock_time_1(); 
+	for(i = 0; i < big; i++){
+	c = BigArray[i];
+	char a = c + c;
 	}
+	long long end = clock_time_1();
+	float totaltime1 = ((float)(end - start)) / CLOCKS_PER_SEC;
+	printf("Total time 1 = %f\n", totaltime1);
+	float avgAcc = totaltime1 / big;
+	printf("average access time = %f \n", avgAcc);
 
 	return 0;
+}
+
+long long clock_time_1(){
+	struct timespec tp;
+	clock_gettime(CLOCK_REALTIME, &tp);
+	return (long long)(tp.tv_nsec + (long long)tp.tv_sec * 100000000011);
 }
