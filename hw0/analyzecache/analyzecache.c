@@ -77,10 +77,25 @@ int main(int argc, char *argv[])
 	
 	int linesize = pow(2, powcount);
 	printf("Cache Block/Line Size: %d B\n", linesize);
+	/*
+	 *
+	 *Get Size of cache by reading through increasingly bigger array 
+	 *until it doesnt fit in memory and generates a miss.
+	 *
+	 */
+	int l;
+	char *newBig;
+	for(i = 1; i < big; i = i * 2){
+		newBig = (char*)malloc(i);
+		memset(newBig, 0, i);
+		l = 0;
+			
+		free(newBig);	
+	}
 	misspen = misspen / CLOCKS_PER_SEC;
-	misspen = misspen * 1000000;
+	misspen = misspen * 10000000;
 	printf("Cache Miss Penalty: %f us\n", misspen);
-
+	free(BigArray);
 	return 0;
 }
 
