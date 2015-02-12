@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
 		currtime1 = times5[j];
 		diff1 = currtime1 - lasttime1;
 		if(diff1 > 0.5){
-			//j--;
+			j--;
 			powcheck1 = j - 1;
 			break;
 		}
