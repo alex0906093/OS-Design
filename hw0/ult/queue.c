@@ -1,7 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <pthread.h>
-#include <semaphore.h>
 #include <string.h>
 #include <errno.h>
 #include "queue.h"
