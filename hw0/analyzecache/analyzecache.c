@@ -91,15 +91,15 @@ int main(int argc, char *argv[])
 	int powCheck = 0;
 	//flag to keep loop going 1 true 0 false
 	int go = 1;
-	newBig = (char*)malloc(128 * MB);
-	memset(newBig, 0, 128 * MB);
+	//newBig = (char*)malloc(128 * MB);
+	//memset(newBig, 0, 128 * MB);
 	//fill array
-	for(i = 0; i < 128 * MB; i++){
+	/*for(i = 0; i < 128 * MB; i++){
 		if(i % 2 == 0)
 			newBig[i] = 'a';
 		else
 			newBig[i] = 'b';
-	}
+	}*/
 	int sizes[18];
 	int jl = 0;
 	float times5[18];
@@ -116,18 +116,30 @@ int main(int argc, char *argv[])
 	for(i = 0; i < 18; i++){
 		o = sizes[i];
 		//read cache into memory
-
-		for(r = 0; r < o; r = r + linesize){
+		newBig = (char*)malloc(o);
+		//printf("array size %d \n", o);
+		memset(newBig, 0, o);
+		for(r = 0; r < o; r++){
+			if(r % 2 == 0)
+				newBig[r] = 'a';
+			else
+				newBig[r] = 'b';
+		}
+		
+		for(r = o; r > o; r = r - 32){
 			test1 = newBig[r];
-			test1 = c;
+			test2 = newBig[r - 1];
+			test1 = test1 + test2;
+			
 		}
 		test1 = test1 - 'b';	
+		
 		//clock speed of array traversal
 		long long start2 = clock_time_1();
 
-		for(r = 0; r < o; r = r + linesize){
+		for(r = 0; r < o; r = r + 32){
 			test2 = newBig[r];
-			test2 = test2 + test2;
+			test2 = test2 +newBig[r - 1];
 		}
 		test2 = 'b';
 		long long end2 = clock_time_1();
@@ -136,8 +148,10 @@ int main(int argc, char *argv[])
 		float avgTime4 = totTime2 / numAcc;
 		times5[timecount] = avgTime4;
 		timecount++;
+		free(newBig);
 		//printf("Average Access Time %f for %d KB\n", avgTime4, o / KB);	
 	}
+	//printf("%c %c \n", test1, test2);
 	misspen = misspen / CLOCKS_PER_SEC;
 	misspen = misspen * 10000;
 	float diff1;
@@ -147,16 +161,17 @@ int main(int argc, char *argv[])
 	for(j = 4; j < 18; j++){
 		currtime1 = times5[j];
 		diff1 = currtime1 - lasttime1;
-		if(diff1 > 1.0){
-			powcheck1 = j;
+		if(diff1 > 0.5){
+			powcheck1 = j - 1;
 			break;
 		}
 	}
-	int cachesize = pow(2, powcheck1 - 1);
+	int cachesize = pow(2, powcheck1);
+	cachesize = cachesize/8;
 	printf("Cache Size: %d KB\n", cachesize);
 	printf("Cache Miss Penalty: %f us\n", misspen);
 	free(BigArray);
-	free(newBig);
+	//free(newBig);
 	return 0;
 }
 
