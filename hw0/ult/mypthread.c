@@ -35,6 +35,7 @@
 //-----------------
 Queue *Queue = 0;ucontext_t *Main = 0;
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*start_routine) (void *), void *ar) {
+<<<<<<< HEAD
     static int id=0;static char FirstCall='y';ucontext_t *ctx = (ucontext_t*)calloc(1,sizeof(ucontext_t));
     if (FirstCall) {Queue = create_queue();FirstCall=0;GetContext(ctx);Main = ctx;}
     ctx->uc_stack.ss_sp   = (char*)malloc(STACK_SIZE);
@@ -51,6 +52,13 @@ void TaskScheduler() {
         if (thread->state==T_RUN) {break;}
     }
     swapcontext(&t,)
+=======
+    static char FirstCall='y';int id=0;
+    if (FirstCall) {  }
+    else {id = GetEmptySlot();}
+    *thread = (mypthread_t){id,2,GetContext()}
+    FirstCall=0;
+>>>>>>> e7dc429d20deff2e1e9858ad718601732a80e0fc
 }
 void mypthread_exit(void *retval) {
 

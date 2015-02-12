@@ -1,3 +1,4 @@
+/* BY : APoorv || Alex */
 #include "analyzecache.h"
 #include <time.h>
 #include <malloc.h>
@@ -77,6 +78,7 @@ int main(int argc, char *argv[])
 
 	int linesize = pow(2, powcount);
 	printf("Cache Block/Line Size: %d B\n", linesize);
+	free(BigArray);
 	/*
 	 *
 	 *Get Size of cache by reading through increasingly bigger array 
@@ -158,7 +160,7 @@ int main(int argc, char *argv[])
 	cachesize = cachesize/8;
 	printf("Cache Size: %d KB\n", cachesize);
 	printf("Cache Miss Penalty: %f us\n", misspen);
-	free(BigArray);
+	//free(BigArray);
 	return 0;
 }
 
