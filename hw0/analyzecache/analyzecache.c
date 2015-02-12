@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 		currtime = times[j];
 		diff = 0.0;
 		diff = currtime - lasttime;
-		
+
 		if(diff > 3.4){
 			misspen = diff;
 			break;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		powcount++;
 		lasttime = currtime;
 	}
-	
+
 	int linesize = pow(2, powcount);
 	printf("Cache Block/Line Size: %d B\n", linesize);
 	/*
@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
 	//fill array
 	for(i = 0; i < 128 * MB; i++){
 		if(i % 2 == 0)
-		newBig[i] = 'a';
+			newBig[i] = 'a';
 		else
-		newBig[i] = 'b';
+			newBig[i] = 'b';
 	}
 	int sizes[18];
 	int jl = 0;
@@ -115,28 +115,28 @@ int main(int argc, char *argv[])
 	int timecount = 0;
 	for(i = 0; i < 18; i++){
 		o = sizes[i];
-	//read cache into memory
-	
-	for(r = 0; r < o; r = r + linesize){
-		test1 = newBig[r];
-		test1 = c;
-	}
-	test1 = test1 - 'b';	
-	//clock speed of array traversal
-	long long start2 = clock_time_1();
-	
-	for(r = 0; r < o; r = r + linesize){
-		test2 = newBig[r];
-		test2 = test2 + test2;
-	}
-	test2 = 'b';
-	long long end2 = clock_time_1();
-	float totTime2 = ((float)(end2 - start2));
-        int numAcc = o / linesize;
-	float avgTime4 = totTime2 / numAcc;
-	times5[timecount] = avgTime4;
-	timecount++;
-	//printf("Average Access Time %f for %d KB\n", avgTime4, o / KB);	
+		//read cache into memory
+
+		for(r = 0; r < o; r = r + linesize){
+			test1 = newBig[r];
+			test1 = c;
+		}
+		test1 = test1 - 'b';	
+		//clock speed of array traversal
+		long long start2 = clock_time_1();
+
+		for(r = 0; r < o; r = r + linesize){
+			test2 = newBig[r];
+			test2 = test2 + test2;
+		}
+		test2 = 'b';
+		long long end2 = clock_time_1();
+		float totTime2 = ((float)(end2 - start2));
+		int numAcc = o / linesize;
+		float avgTime4 = totTime2 / numAcc;
+		times5[timecount] = avgTime4;
+		timecount++;
+		//printf("Average Access Time %f for %d KB\n", avgTime4, o / KB);	
 	}
 	misspen = misspen / CLOCKS_PER_SEC;
 	misspen = misspen * 10000;
@@ -145,12 +145,12 @@ int main(int argc, char *argv[])
 	float currtime1;
 	int powcheck1 = 0;
 	for(j = 4; j < 18; j++){
-	currtime1 = times5[j];
-	diff1 = currtime1 - lasttime1;
-	if(diff1 > 1.0){
-	   powcheck1 = j;
-	   break;
-	 }
+		currtime1 = times5[j];
+		diff1 = currtime1 - lasttime1;
+		if(diff1 > 1.0){
+			powcheck1 = j;
+			break;
+		}
 	}
 	int cachesize = pow(2, powcheck1 - 1);
 	printf("Cache Size: %d KB\n", cachesize);
