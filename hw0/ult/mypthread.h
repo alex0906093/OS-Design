@@ -3,11 +3,12 @@
 
 // Types
 typedef struct {
-	// Define any fields you might need inside here.
+    int thr_id;
+    char state;
+    ucontext_t context;
 } mypthread_t;
 
 typedef struct {
-	// Define any fields you might need inside here.
 } mypthread_attr_t;
 
 // Functions
