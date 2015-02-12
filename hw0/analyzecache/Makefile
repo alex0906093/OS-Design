@@ -1,7 +1,7 @@
 default: all
 
 CC=gcc
-CFLAGS=-g -lm -lrt
+CFLAGS=-g -O0 -lm -lrt
 
 all: analyzecache
 

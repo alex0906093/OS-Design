@@ -14,7 +14,7 @@ long long clock_time_1();
 
 int main(int argc, char *argv[])
 {	
-	int big = 12 * MB;
+	int big = 24 * MB;
 	char *BigArray = (char*)malloc(big);
 	memset(BigArray, 0, big);
 	int f = 0;
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 		diff = 0.0;
 		diff = currtime - lasttime;
 		
-		if(diff > 1.5){
+		if(diff > 3.4){
 			misspen = diff;
 			break;
 		}
@@ -84,18 +84,79 @@ int main(int argc, char *argv[])
 	 *
 	 */
 	int l;
+	char t;
 	char *newBig;
-	for(i = 1; i < big; i = i * 2){
-		newBig = (char*)malloc(i);
-		memset(newBig, 0, i);
-		l = 0;
-			
-		free(newBig);	
+	int y;
+	float accTime1;
+	int powCheck = 0;
+	//flag to keep loop going 1 true 0 false
+	int go = 1;
+	newBig = (char*)malloc(128 * MB);
+	memset(newBig, 0, 128 * MB);
+	//fill array
+	for(i = 0; i < 128 * MB; i++){
+		if(i % 2 == 0)
+		newBig[i] = 'a';
+		else
+		newBig[i] = 'b';
+	}
+	int sizes[18];
+	int jl = 0;
+	float times5[18];
+	//populate sizes array
+	for(i = KB; i <= 128 * MB; i = i * 2){
+		sizes[jl] = i;
+		//printf("%d \n", jl);
+		jl++;
+	}
+	int o;
+	int r;
+	char test1, test2;
+	int timecount = 0;
+	for(i = 0; i < 18; i++){
+		o = sizes[i];
+	//read cache into memory
+	
+	for(r = 0; r < o; r = r + linesize){
+		test1 = newBig[r];
+		test1 = c;
+	}
+	test1 = test1 - 'b';	
+	//clock speed of array traversal
+	long long start2 = clock_time_1();
+	
+	for(r = 0; r < o; r = r + linesize){
+		test2 = newBig[r];
+		test2 = test2 + test2;
+	}
+	test2 = 'b';
+	long long end2 = clock_time_1();
+	float totTime2 = ((float)(end2 - start2));
+        int numAcc = o / linesize;
+	float avgTime4 = totTime2 / numAcc;
+	times5[timecount] = avgTime4;
+	timecount++;
+	//printf("Average Access Time %f for %d KB\n", avgTime4, o / KB);	
 	}
 	misspen = misspen / CLOCKS_PER_SEC;
-	misspen = misspen * 10000000;
+	misspen = misspen * 10000;
+	float diff1;
+	float lasttime1 = times5[3];
+	float currtime1;
+	int powcheck1 = 0;
+	for(j = 4; j < 18; j++){
+	currtime1 = times5[j];
+	diff1 = currtime1 - lasttime1;
+	if(diff1 > 1.0){
+	   powcheck1 = j;
+	   break;
+	 }
+	}
+	int cachesize = pow(2, powcheck1 - 1);
+	printf("Cache Size: %d KB\n", cachesize);
 	printf("Cache Miss Penalty: %f us\n", misspen);
 	free(BigArray);
+	free(newBig);
 	return 0;
 }
 
