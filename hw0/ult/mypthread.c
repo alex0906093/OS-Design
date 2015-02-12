@@ -30,7 +30,7 @@
 mypthread_t ThreadContainer[THREAD_THROTTLE];
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*start_routine) (void *), void *ar) {
     static char FirstCall='y';int id=0;
-    if (FirstCall) {}
+    if (FirstCall) {  }
     else {id = GetEmptySlot();}
     *thread = (mypthread_t){id,2,GetContext()}
     FirstCall=0;
