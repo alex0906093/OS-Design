@@ -91,22 +91,12 @@ int main(int argc, char *argv[])
 	int powCheck = 0;
 	//flag to keep loop going 1 true 0 false
 	int go = 1;
-	//newBig = (char*)malloc(128 * MB);
-	//memset(newBig, 0, 128 * MB);
-	//fill array
-	/*for(i = 0; i < 128 * MB; i++){
-		if(i % 2 == 0)
-			newBig[i] = 'a';
-		else
-			newBig[i] = 'b';
-	}*/
 	int sizes[18];
 	int jl = 0;
 	float times5[18];
 	//populate sizes array
 	for(i = KB; i <= 128 * MB; i = i * 2){
 		sizes[jl] = i;
-		//printf("%d \n", jl);
 		jl++;
 	}
 	int o;
@@ -125,8 +115,8 @@ int main(int argc, char *argv[])
 			else
 				newBig[r] = 'b';
 		}
-		
-		for(r = o; r > o; r = r - 32){
+		//put blocks into cache.
+		for(r = o; r > 0; r = r - 32){
 			test1 = newBig[r];
 			test2 = newBig[r - 1];
 			test1 = test1 + test2;
@@ -151,7 +141,6 @@ int main(int argc, char *argv[])
 		free(newBig);
 		//printf("Average Access Time %f for %d KB\n", avgTime4, o / KB);	
 	}
-	//printf("%c %c \n", test1, test2);
 	misspen = misspen / CLOCKS_PER_SEC;
 	misspen = misspen * 10000;
 	float diff1;
@@ -162,6 +151,7 @@ int main(int argc, char *argv[])
 		currtime1 = times5[j];
 		diff1 = currtime1 - lasttime1;
 		if(diff1 > 0.5){
+			j--;
 			powcheck1 = j - 1;
 			break;
 		}
@@ -171,7 +161,6 @@ int main(int argc, char *argv[])
 	printf("Cache Size: %d KB\n", cachesize);
 	printf("Cache Miss Penalty: %f us\n", misspen);
 	free(BigArray);
-	//free(newBig);
 	return 0;
 }
 
