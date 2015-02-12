@@ -45,7 +45,7 @@ void enqueue(Queue *q, void *data){
 }
 
 //get data from 
-void *dequeue(Queue *q){
+void *dequeue(Queue *q, void*(*handler)){
 	if(q->length == 0){
 		return NULL;
 	}
@@ -54,6 +54,7 @@ void *dequeue(Queue *q){
 		head = q->head;
 		void *data;
 		data = head->data;
+		handler(data);
 		free(head);
 		q->length = 0;
 		return data;
@@ -64,6 +65,7 @@ void *dequeue(Queue *q){
 		void *data;
 		data = head->data;
 		q->head = q->head->next;
+		handler(data);
 		free(head);
 		q->length--;
 		return data;
@@ -71,8 +73,9 @@ void *dequeue(Queue *q){
 }
 
 //destroy Queue
-void destroy_queue(Queue *q){
+void destroy_queue(Queue *q,void*(*handler)){
 	while(q->length > 0){
-		dequeue(q);
+		
+		dequeue(q, handler);
 	}
 }
