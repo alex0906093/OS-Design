@@ -89,8 +89,6 @@ int main(int argc, char *argv[])
 	int y;
 	float accTime1;
 	int powCheck = 0;
-	//flag to keep loop going 1 true 0 false
-	int go = 1;
 	int sizes[18];
 	int jl = 0;
 	float times5[18];
