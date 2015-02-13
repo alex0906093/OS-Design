@@ -62,18 +62,31 @@ int main(int argc, char *argv[])
 	float misspen;
 	int j;
 	float diff;
+	float lastdiff;
 	int powcount = 1;
 	for(j = 1; j < 11; j++){
 		currtime = times[j];
 		diff = 0.0;
 		diff = currtime - lasttime;
-
+		if(j > 1){
+			if(currtime / lasttime > 1.5){
+			//printf("%f for j = %d \n", currtime / lasttime, j);
+			//printf("lastdiff %f diff %f \n", diff, lastdiff);
+			
+			misspen = diff;
+			break;
+			}
+				
+		}
+		/*
 		if(diff > 3.4){
 			misspen = diff;
 			break;
-		}
+		}*/
+		
 		powcount++;
 		lasttime = currtime;
+		lastdiff = diff;
 	}
 
 	int linesize = pow(2, powcount);
