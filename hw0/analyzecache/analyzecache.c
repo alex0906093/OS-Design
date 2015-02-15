@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 	int jl = 0;
 	float times5[18];
 	//populate sizes array
-	for(i = KB; i <= 128 * MB; i = i * 2){
+	for(i = 1 * KB; i <= 128 * MB; i = i * 2){
 		sizes[jl] = i;
 		jl++;
 	}
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 		for(r = o; r > 0; r = r - 32){
 			test1 = newBig[r];
 			test2 = newBig[r - 1];
-			test1 = test1 + test2;
+			newBig[r] = test1 + test2;
 			
 		}
 		test1 = test1 - 'b';	
@@ -143,6 +143,7 @@ int main(int argc, char *argv[])
 		for(r = 0; r < o; r = r + 32){
 			test2 = newBig[r];
 			test2 = test2 +newBig[r - 1];
+			newBig[r] = test2;
 		}
 		test2 = 'b';
 		long long end2 = clock_time_1();
@@ -169,7 +170,7 @@ int main(int argc, char *argv[])
 			break;
 		}
 	}
-	int cachesize = pow(2, powcheck1);
+	int cachesize = pow(2, powcheck1 - 1);
 	cachesize = cachesize/8;
 	printf("Cache Size: %d KB\n", cachesize);
 	printf("Cache Miss Penalty: %f us\n", misspen);
