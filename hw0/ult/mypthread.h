@@ -1,11 +1,14 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ucontext.h>
 // Types
 typedef struct mpt {
     int thr_id;
     char state;
-    ucontext_t context;
+    ucontext_t *context;
     struct mpt *Waiter;
 } mypthread_t;
 
