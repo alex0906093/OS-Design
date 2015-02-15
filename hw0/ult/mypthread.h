@@ -1,14 +1,19 @@
 #ifndef H_MYPTHREAD
 #define H_MYPTHREAD
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <ucontext.h>
 // Types
-typedef struct {
+typedef struct mpt {
     int thr_id;
     char state;
-    ucontext_t context;
+    ucontext_t *context;
+    struct mpt *Waiter;
 } mypthread_t;
 
 typedef struct {
+    int StackSize;
 } mypthread_attr_t;
 
 // Functions
@@ -20,7 +25,10 @@ void mypthread_exit(void *retval);
 int mypthread_yield(void);
 
 int mypthread_join(mypthread_t thread, void **retval);
-
+//--------ERROR-VALS------|
+#define ESRCH   -1
+#define EINVAL  -2
+#define EDEADLK -3
 
 /* Don't touch anything after this line.
  *

@@ -16,7 +16,6 @@ Queue *create_queue(){
 	q->tail = NULL;
 	q->length = 0;
 	return q;
-
 }
 
 //get length of queue
