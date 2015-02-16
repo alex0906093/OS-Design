@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-g -std=c99
+CFLAGS=-g -std=gnu99
 
 DEMO=mtsort
 
@@ -12,8 +12,8 @@ help:
 	@echo "\tmake basic - Build $(DEMO) with the basic ULT implementation."
 	@echo "\tmake system - Build the $(DEMO) using the system pthreads implementation."
 
-basic: $(DEMO).c mypthread.c mypthread.h
-	$(CC) $(CFLAGS) $(DEMO).c mypthread.c -o $(DEMO)-basic
+basic: $(DEMO).c mypthread.c mypthread.h queue.c queue.h
+	$(CC) $(CFLAGS) $(DEMO).c mypthread.c queue.c -o $(DEMO)-basic
 
 system: $(DEMO).c
 	$(CC) $(CFLAGS) $(DEMO).c -o $(DEMO)-system -pthread -include mypthread-system-override.h

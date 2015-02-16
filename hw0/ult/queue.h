@@ -1,6 +1,6 @@
 #ifndef QUEUE_H
 #define QUEUE_H
-#define QUEUE_SCAN(e,Q,i) QueueItem *e=Q->head;for (int i=0;e!=Q->head&&i>0;i++,e=e->next)
+#define QUEUE_SCAN(e,Q,i) QueueItem *e=Q->head;for (int i=0;e!=Q->head||!i;i++,e=e->next)
 
 typedef struct QueueItem* QueueItemPtr;
 
