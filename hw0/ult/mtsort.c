@@ -91,7 +91,6 @@ void * fncheck( void *arg )
     while( !quitting )
     {
         printf( "." );
-        printList(pargs->num, size); //AP---------------------------------
         if( (j+1) % 80 == 0 )
             printf( "\n" );
 

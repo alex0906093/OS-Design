@@ -64,6 +64,7 @@ void mypthread_exit(void *retval) {
     CurThr->state = T_DEAD;bool AllDead=1;
     if (CurThr->Waiter) {CurThr->Waiter->state = T_ACTIVE;}
     free(CurThr->context->uc_stack.ss_sp);free(CurThr->context);
+    D(printf(FMT_STR(YELLOW,"Bye.")));
     //QUEUE_SCAN(q,Queue_m,i) {if (q->state!=T_DEAD) {AllDead=0;break;}}
     //if (AllDead) {mypthread_free();setcontext(Main);} else {
     mypthread_yield();
