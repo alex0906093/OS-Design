@@ -91,6 +91,7 @@ void * fncheck( void *arg )
     while( !quitting )
     {
         printf( "." );
+        printList(pargs->num, size); //AP---------------------------------
         if( (j+1) % 80 == 0 )
             printf( "\n" );
 
@@ -116,7 +117,7 @@ void * fncheck( void *arg )
         // j seconds
         j = j+1;
 #ifndef MYTHREAD
-        sleep( j );
+        //sleep( j );
 #endif
         mypthread_yield( );
     }

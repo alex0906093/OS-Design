@@ -20,6 +20,7 @@
 //------AUTOMATE---
 #define ITER_LT(i,j) for (int i=0;i<j;i++)
 #define INIT_THREAD(x) (mypthread_t){id++,x,ctx,0}
+#define PRIORITY(i) (i?QDT->thr_id>CurThr->thr_id:QDT->thr_id<=CurThr->thr_id)
 #define THREAD mypthread_t
 #define QDT    ((THREAD *)q->data)
 //------STATES-----
@@ -37,7 +38,7 @@
 #   define D(x) 
 #endif
 //-----------------
-Queue *Queue_m=0;ucontext_t *Main=0;THREAD *CurThr=0;
+Queue *Queue_m=0;ucontext_t *Main=0;THREAD *CurThr=0;QueueItem *q=0;
 int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*start_routine) (void *), void *ar) {
     static int id=0;static bool FirstCall=1;ucontext_t *ctx = (ucontext_t*)calloc(1,sizeof(ucontext_t));
     if (FirstCall) {
@@ -49,9 +50,10 @@ int mypthread_create(mypthread_t *thread, const mypthread_attr_t *attr, void *(*
         D(printf(FMT_STR(GREEN,"Created Main Thread [T-%d]"),tmp->thr_id));
         ctx = (ucontext_t*)calloc(1,sizeof(ucontext_t));
     }
+    getcontext(ctx);
     ctx->uc_stack.ss_size = attr&&attr->StackSize?attr->StackSize:STACK_SIZE;
     ctx->uc_stack.ss_sp   = (char*)malloc(ctx->uc_stack.ss_size);
-    ctx->uc_link = CurThr->context;
+    ctx->uc_link = 0;
     *thread = INIT_THREAD(T_ACTIVE);
     enqueue(Queue_m,thread);
     makecontext(thread->context,(void *)start_routine,1,ar);
@@ -73,23 +75,30 @@ int mypthread_free(void) {
 }
 int mypthread_yield(void) {
     bool Change=0;
-    QUEUE_SCAN(q,Queue_m,i) {
-        if (QDT->state!=T_ACTIVE) {continue;}
-        D(printf(FMT_STR(CYAN,"Switching Context -> [T-%d]"),QDT->thr_id));
-        ucontext_t *c=CurThr->context;CurThr=QDT;
-        swapcontext(c,CurThr->context);Change=1;break;
+    ITER_LT(j,2) {
+        QUEUE_SCAN(q,Queue_m,i) {
+            D(printf(FMT_STR(CYAN,"Scanning Thr [T-%d] @ Priority:%d"),QDT->thr_id,j));
+            if (QDT->state!=T_ACTIVE||PRIORITY(j)) {continue;}
+            D(if (QDT->thr_id==32) {
+                int debb=1;
+            });
+            D(printf(FMT_STR(CYAN,"Switching Context -> [T-%d]"),QDT->thr_id));
+            ucontext_t *c=CurThr->context;CurThr=QDT;
+            swapcontext(c,CurThr->context);Change=1;break;
+        }
+        if (Change) {break;}
     }
     return Change?YAY:NAH;
 }
 int mypthread_join(mypthread_t thread, void **retval) {
     if (thread.thr_id==CurThr->thr_id) {D(printf(FMT_STR(RED,"Detected DEADLOCK when joining with T-%d"),thread.thr_id));return EDEADLK;}
     bool found=0;
-    QUEUE_SCAN(q,Queue_m,i) {D(printf(CYAN "Scanning ID:%d\n",QDT->thr_id));if (QDT->thr_id==thread.thr_id) {found=1;break;}}
+    QUEUE_SCAN(q,Queue_m,i) {if (QDT->thr_id==thread.thr_id) {found=1;break;}}
     if (!found) {D(printf(FMT_STR(YELLOW,"Couldn't find thread with ID:%d"),thread.thr_id));return ESRCH;}
     if (QDT->state==T_DEAD) {D(printf(FMT_STR(YELLOW,"Thread %d is dead. :("),QDT->thr_id));return EINVAL;}
     if (QDT->Waiter) {D(printf(FMT_STR(RED,"TH:[%d] already waiting on %d"),QDT->Waiter->thr_id,QDT->thr_id));return EINVAL;}
     CurThr->state = T_BLOCKED;
     QDT->Waiter = CurThr;
     D(printf(FMT_STR(CYAN,"Joined @ [T-%d]"),QDT->thr_id));
-    mypthread_yield();
+    return mypthread_yield();
 }
